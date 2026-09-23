@@ -30,6 +30,28 @@ const initialState = {
   },
 };
 
+export const itineraryInitialState = initialState;
+
+
+export const sanitizeItineraryState = (raw) => {
+  if (!raw || typeof raw !== 'object') return initialState;
+
+  const rawStep = Number(raw.step);
+  const step = Number.isInteger(rawStep) && rawStep >= 1 && rawStep <= 6 ? rawStep : 1;
+
+  return {
+    ...initialState,
+    ...raw,
+    step,
+    travelDetails: { ...initialState.travelDetails, ...raw.travelDetails },
+    preferences: { ...initialState.preferences, ...raw.preferences },
+    contactDetails: { ...initialState.contactDetails, ...raw.contactDetails },
+    destinations: Array.isArray(raw.destinations) ? raw.destinations : [],
+    activities: Array.isArray(raw.activities) ? raw.activities : [],
+    days: Array.isArray(raw.days) ? raw.days : [],
+  };
+};
+
 const arrayMove = (arr, from, to) => {
   if (to < 0 || to >= arr.length || from === to) return;
   const [item] = arr.splice(from, 1);

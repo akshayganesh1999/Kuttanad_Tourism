@@ -17,9 +17,6 @@ const me = asyncHandler(async (req, res) => {
 });
 
 const logout = asyncHandler(async (req, res) => {
-  // JWTs are stateless — there is nothing to invalidate server-side. The
-  // frontend simply discards the token; this endpoint exists so the client
-  // has a consistent "logout" call to make and confirm.
   return new ApiResponse(200, 'Logged out successfully', null).send(res);
 });
 

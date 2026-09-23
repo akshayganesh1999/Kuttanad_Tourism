@@ -1,6 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit';
 import uiReducer, { THEME_STORAGE_KEY } from './slices/uiSlice';
-import itineraryReducer, { ITINERARY_STORAGE_KEY } from '../features/itinerary/itinerarySlice';
+import itineraryReducer, {
+  ITINERARY_STORAGE_KEY,
+  sanitizeItineraryState,
+} from '../features/itinerary/itinerarySlice';
 import authReducer, { AUTH_TOKEN_KEY, AUTH_USER_KEY } from '../features/auth/authSlice';
 
 const loadJSON = (key) => {
@@ -18,7 +21,8 @@ const preloadedToken = localStorage.getItem(AUTH_TOKEN_KEY);
 const preloadedUser = loadJSON(AUTH_USER_KEY);
 
 const preloadedState = {};
-if (preloadedItinerary) preloadedState.itinerary = preloadedItinerary;
+
+if (preloadedItinerary) preloadedState.itinerary = sanitizeItineraryState(preloadedItinerary);
 if (preloadedToken && preloadedUser) {
   preloadedState.auth = { token: preloadedToken, user: preloadedUser };
 }
@@ -32,6 +36,7 @@ export const store = configureStore({
   preloadedState: Object.keys(preloadedState).length ? preloadedState : undefined,
 });
 
+
 store.subscribe(() => {
   try {
     localStorage.setItem(ITINERARY_STORAGE_KEY, JSON.stringify(store.getState().itinerary));
@@ -39,6 +44,7 @@ store.subscribe(() => {
     console.warn('Could not save itinerary draft to localStorage:', err);
   }
 });
+
 
 let lastAuthToken = preloadedToken || null;
 store.subscribe(() => {
@@ -73,5 +79,3 @@ store.subscribe(() => {
 });
 
 export default store;
-
-

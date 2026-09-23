@@ -45,15 +45,10 @@ const PlanYourTrip = () => {
   const dispatch = useDispatch();
   const itinerary = useSelector((s) => s.itinerary);
   const { step } = itinerary;
-  const StepComponent = STEP_COMPONENTS[step];
+  const StepComponent = STEP_COMPONENTS[step] || StepTravelDetails;
   const canGoNext = isStepValid(step, itinerary);
 
-  // Tracked here (not inside SubmitTripCTA's parent, StepReview) specifically
-  // so that resetting the itinerary on a successful submit can't hide the
-  // confirmation: StepReview has its own "set your dates first" guard that
-  // would otherwise re-trigger the instant the draft clears. SubmitTripCTA
-  // itself is rendered in the same tree position either way, so its own
-  // internal success state is never lost by toggling this.
+
   const [submitted, setSubmitted] = useState(false);
 
   return (

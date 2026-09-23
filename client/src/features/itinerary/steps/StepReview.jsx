@@ -17,11 +17,7 @@ import {
 
 const findById = (list, id) => list.find((item) => item._id === id);
 
-/**
- * One assigned destination or experience within a day: reorder with the
- * up/down arrows (reliable on touch, unlike drag-and-drop), move it to a
- * different day via the select, or remove it entirely.
- */
+
 const ItemRow = ({ label, onRemove, onMoveUp, onMoveDown, onMoveToDay, dayOptions, disableUp, disableDown }) => (
   <div className="flex items-center justify-between gap-2 rounded-lg border border-backwater-100 bg-backwater-50/40 px-3 py-2 text-sm">
     <span className="line-clamp-1 font-medium text-backwater-900">{label}</span>
@@ -73,12 +69,10 @@ const StepReview = () => {
   const { days, destinations, activities, travelDetails } = useSelector((s) => s.itinerary);
   const [confirmingRegenerate, setConfirmingRegenerate] = useState(false);
 
-  // Build the first draft automatically the first time this step is reached.
   useEffect(() => {
     if (days.length === 0 && travelDetails.numberOfDays > 0) {
       dispatch(generateDays());
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleRegenerate = () => {
